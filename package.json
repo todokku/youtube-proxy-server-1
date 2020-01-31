@@ -1,0 +1,19 @@
+{
+  "name": "youtube-video-server",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "Ray Britton <raybritton@gmail.com>",
+  "license": "Apache 2.0",
+  "private": true,
+  "engines": {
+    "node": "10.18.1"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "express": "^4.17.1",
+    "request": "^2.88.0"
+  }
+}
