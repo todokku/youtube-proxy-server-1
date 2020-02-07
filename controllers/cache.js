@@ -13,23 +13,27 @@ function expired(key) {
     return expired;
 }
 
-module.exports.get = function(key) {
-    if (expired(key)) {
+module.exports.get = function(type, key) {
+    if (expired(makeKey(type, key))) {
         return null;
     } else {
-        return cacheData[key].data;
+        return cacheData[makeKey(type, key)].data;
     }
 }
 
-module.exports.put = function(key, value, longLived) {
+module.exports.put = function(type, key, value, longLived) {
     const date = new Date();
     date.setTime(date.getTime() + longLived ? LONG_LIFE : SHORT_LIFE);
-    cacheData[key] = {
+    cacheData[makeKey(type, key)] = {
         maxAge: date,
         data: value
     };
 }
 
-module.exports.contains = function(key) {
-    return !expired(key);
+module.exports.contains = function(type, key) {
+    return !expired(makeKey(type, key));
+}
+
+function makeKey(type, key) {
+    return `${type}-${key}`;
 }

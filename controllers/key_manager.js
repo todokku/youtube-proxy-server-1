@@ -1,12 +1,4 @@
 var keyQuotas = [];
-var keyIdx = 0;
-
-function nextKeyIdx() {
-    keyIdx++;
-    if (keyIdx >= keyQuotas.length) {
-        keyIdx = 0;
-    }
-}
 
 function resetQuotas() {
     keyQuotas.forEach((keyQuota) => keyQuota.quota = 10000);
@@ -33,15 +25,13 @@ module.exports.getTotalRemainingQuota = function() {
 }
 
 module.exports.getNextKey = function(cost) {
-    nextKeyIdx();
-    const startingIdx = keyIdx;
+    const startingIdx = 0;
 
-    while (startingIdx != keyIdx) {
-        if (keyQuotas[keyIdx].quota >= cost) {
-            keyQuotas[keyIdx].quota -= cost;
-            return keyQuotas[keyIdx].key;
+    for(var i = 0; i < keyQuotas.length; i++) {
+        if (keyQuotas[i].quota >= cost) {
+            keyQuotas[i].quota -= cost;
+            return keyQuotas[i].key;
         } 
-        nextKeyIdx();
     }
     return null;
 }

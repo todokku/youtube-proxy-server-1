@@ -10,7 +10,7 @@ function search(type, searchTerm, forceReload, callback) {
             if (err) {
                 callback(err);
             } else {
-                cache.put(searchTerm, data, true);
+                cache.put(type, searchTerm, data, true);
                 callback(null, data);
             }
         });
