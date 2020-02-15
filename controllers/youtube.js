@@ -22,7 +22,7 @@ const CONVERTERS = {
     }),
     'video': ((item) => {
         return {
-            name: item.snippet.title,
+            title: item.snippet.title,
             id: item.id.videoId,
             date: item.snippet.publishedAt,
             description: item.snippet.description,
