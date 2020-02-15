@@ -33,6 +33,10 @@ const CONVERTERS = {
     })
 }
 
+module.exports.page = function(type, id, page, callback) {
+    apiRequest('search', type, CONVERTERS[type], true, null, `&${type}Id=${id}&pageToken=${page}`, callback);
+}
+
 module.exports.search = function(type, searchTerm, callback) {
     apiRequest('search', type, CONVERTERS[type], false, searchTerm, '', callback);
 } 
