@@ -34,28 +34,19 @@ const CONVERTERS = {
 }
 
 module.exports.page = function(type, id, page, callback) {
-    apiRequest('search', type, CONVERTERS[type], true, null, `&${type}Id=${id}&pageToken=${page}`, callback);
+    var extras = `&${type}Id=${id}&videoDimension=2d`;
+    if (page) {
+        extras += `&pageToken=${page}`;
+    }
+    if (type == "channel") {
+        extras += `&order=date`;
+    }
+    apiRequest('search', 'video', CONVERTERS.video, true, null, extras, callback);
 }
 
 module.exports.search = function(type, searchTerm, callback) {
     apiRequest('search', type, CONVERTERS[type], false, searchTerm, '', callback);
 } 
-
-module.exports.searchChannelVideos = function (channelId, page, callback) {
-    var params = `&videoDimension=2d&order=date&channelId=${channelId}`;
-    if (page) {
-        params += `&pageToken=${page}`;
-    }
-    apiRequest('search','video', CONVERTERS['video'], true, null, params, callback);
-}
-
-module.exports.searchPlaylistVideos = function (playlistId, page, callback) {
-    var params = `&playlistId=${playlistId}`;
-    if (page) {
-        params += `&pageToken=${page}`;
-    }
-    apiRequest('playlistItems', 'video', CONVERTERS['video'], true, null, params, callback);
-}
 
 function apiRequest(section, type, converter, paged, searchTerm, extraParams, callback) {
     performRequest(section, type, converter, paged, searchTerm, extraParams, [], callback);

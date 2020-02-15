@@ -66,13 +66,13 @@ function page(type, id, page, forceReload, callback) {
     }
 }
 
-router.get("/channel/:id/videos/:page", (req, res) => {
+router.get("/channel/:id/videos", (req, res) => {
     const channelId = req.params.id;
-    const pageNum = req.params.page;
+    const pageToken = req.query.page;
     const reload = req.query.reload != undefined;
-    page('channel', channelId, pageNum, reload, (err, data) => {
+    page('channel', channelId, pageToken, reload, (err, data) => {
         if (err) {
-            console.error(`Error getting page ${pageNum} for channel ${channelId}`);
+            console.error(`Error getting page ${pageToken} for channel ${channelId}`);
             console.error(err);
             if (err.quotaEmpty) {
                 res.sendStatus(429);
@@ -85,13 +85,13 @@ router.get("/channel/:id/videos/:page", (req, res) => {
     });
 });
 
-router.get("/playlist/:id/videos/:page", (req, res) => {
+router.get("/playlist/:id/videos", (req, res) => {
     const playlistId = req.params.id;
-    const pageNum = req.params.page;
+    const pageToken = req.query.page;
     const reload = req.query.reload != undefined;
-    page('playlist', playlistId, pageNum, reload, (err, data) => {
+    page('playlist', playlistId, pageToken, reload, (err, data) => {
         if (err) {
-            console.error(`Error getting page ${pageNum} for playlist ${playlistId}`);
+            console.error(`Error getting page ${pageToken} for playlist ${playlistId}`);
             console.error(err);
             if (err.quotaEmpty) {
                 res.sendStatus(429);
