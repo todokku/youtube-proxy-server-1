@@ -35,7 +35,7 @@ Get the quota status
 }
 ```
 
-### /search/:type
+### GET /search/:type
 
 | Param | Type | Comment |
 | --- | --- | --- |
@@ -50,7 +50,7 @@ Get the quota status
 
 | Field | Type | Comment |
 | --- | --- | --- |
-| list | Array<Video | Channel | Playlist> | List of search results |
+| list | Array<Video, Channel, Playlist> | List of search results |
 | nextPage | String | Page token for next page |
 
 ##### Channel
