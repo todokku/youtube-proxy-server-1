@@ -81,7 +81,7 @@ function performRequest(section, type, converter, paged, searchTerm, extraParams
                 });
                 if (paged) {
                     data = {
-                        videos: data,
+                        list: data,
                         nextPage: resp.nextPageToken
                     }
                 }

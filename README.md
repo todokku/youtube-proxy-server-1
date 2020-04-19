@@ -1,6 +1,6 @@
-# Youtube Cache Server
+# Youtube Proxy Server
 
-Node.js express server created to cache requests to YouTube. It is designed for personal use only and will not scale past a few users.
+Node.js express server created to proxy requests to YouTube using rotating keys. It is designed for personal use only and will not scale past a few users.
 
 ## Environment Variables
 
@@ -24,7 +24,7 @@ Get the quota status
 | remaining | Integer | Total remaining quota from all keys* |
 | human | String | A human readable description of remaining quotas |
 
-*If the total is 101 this doesn't mean a request is actually possible as this could from 4 keys none with enough to make a request individually.
+*If the total is 101 this doesn't mean a request is actually possible as this could from 2 or more keys none with enough to make a request individually.
 
 #### Example 
 
@@ -32,6 +32,71 @@ Get the quota status
 {
     "remainingQuota": 304,
     "human": "key1: 104\nkey2: 200"
+}
+```
+
+### /search/:type
+
+| Param | Type | Comment |
+| --- | --- | --- |
+| type | String | Must be 'channel', 'playlist' or 'video' |
+
+| Query | Type | Comment |
+| --- | --- | --- |
+| q | String | Search term |
+| page | String | Page token |
+
+#### Response
+
+| Field | Type | Comment |
+| --- | --- | --- |
+| list | Array<Video | Channel | Playlist> | List of search results |
+| nextPage | String | Page token for next page |
+
+##### Channel
+
+| Field | Type | Comment |
+| --- | --- | --- |
+| id | String | YouTube ID of channel |
+| name | String | Channel Title |
+| thumbnail | String | URL of YouTube channel thumbnail (high or med quality) |
+
+##### Video
+
+| Field | Type | Comment |
+| --- | --- | --- |
+| id | String | YouTube ID of video |
+| channelId | String | Channel ID |
+| channelTitle | String | Channel Title |
+| title | String | Video name |
+| thumbnail | String | URL of YouTube thumbnail (high or med quality) |
+| description | String | Video description |
+| date | String | Video publish date |
+
+##### Playlist
+
+| Field | Type | Comment |
+| --- | --- | --- |
+| id | String | YouTube ID of playlist |
+| name | String | Playlist name |
+| channelId | String | Channel ID |
+| channelTitle | String | Channel Title |
+| thumbnail | String | URL of YouTube thumbnail (high or med quality) |
+
+#### Example 
+
+```json
+{
+    "list": [
+        {
+            "title": "Example Video",
+            "id": "grjytegdg",
+            "thumbnail": "https://youtube.com/media/5hjhrtjhe",
+            "channelId": "j75erhethr",
+            "channelTitle": "Example Channel"
+        }
+    ],
+    "nextPage": "d7fgfg3g"
 }
 ```
 
