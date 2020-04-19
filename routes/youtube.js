@@ -1,26 +1,20 @@
 const router = require("express").Router();
-const cache = require("../controllers/cache");
 const youtube = require("../controllers/youtube");
 
-function search(type, searchTerm, forceReload, callback) {
-    if (!forceReload && cache.contains(type, searchTerm)) {
-        callback(null, cache.get(type, searchTerm));
-    } else {
-        youtube.search(type, searchTerm, (err, data) => {
-            if (err) {
-                callback(err);
-            } else {
-                cache.put(type, searchTerm, data, true);
-                callback(null, data);
-            }
-        });
-    }
+function search(type, searchTerm, pageToken, callback) {
+    youtube.search(type, searchTerm, pageToken, (err, data) => {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, data);
+        }
+    });
 }
 
 router.get("/search/:type", (req, res) => {
     const query = req.query.q;
     const type = req.params.type;
-    const reload = req.query.reload != undefined;
+    const pageToken = req.query.page;
     if (query == undefined || query == "") {
         res.status(400).send({
             error: true,
@@ -35,9 +29,9 @@ router.get("/search/:type", (req, res) => {
         });
         return;
     }
-    search(type, query, reload, (err, data) => {
+    search(type, query, pageToken, (err, data) => {
         if (err) {
-            console.error(`Error search type: ${type}   query: ${query}   reload: ${reload}`);
+            console.error(`Error search type: ${type}   query: ${query}   pageToken: ${pageToken}`);
             console.error(err);
             if (err.quotaEmpty) {
                 res.sendStatus(429);
@@ -50,27 +44,20 @@ router.get("/search/:type", (req, res) => {
     });
 });
 
-function page(type, id, page, forceReload, callback) {
-    const key = id+page
-    if (!forceReload && cache.contains(type, key)) {
-        callback(null, cache.get(type, key));
-    } else {
-        youtube.page(type, id, page, (err, data) => {
-            if (err) {
-                callback(err);
-            } else {
-                cache.put(type, key, data, true);
-                callback(null, data);
-            }
-        });
-    }
+function page(type, id, page, callback) {
+    youtube.page(type, id, page, (err, data) => {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, data);
+        }
+    });
 }
 
 router.get("/channel/:id/videos", (req, res) => {
     const channelId = req.params.id;
     const pageToken = req.query.page;
-    const reload = req.query.reload != undefined;
-    page('channel', channelId, pageToken, reload, (err, data) => {
+    page('channel', channelId, pageToken, (err, data) => {
         if (err) {
             console.error(`Error getting page ${pageToken} for channel ${channelId}`);
             console.error(err);
@@ -88,8 +75,7 @@ router.get("/channel/:id/videos", (req, res) => {
 router.get("/playlist/:id/videos", (req, res) => {
     const playlistId = req.params.id;
     const pageToken = req.query.page;
-    const reload = req.query.reload != undefined;
-    page('playlist', playlistId, pageToken, reload, (err, data) => {
+    page('playlist', playlistId, pageToken, (err, data) => {
         if (err) {
             console.error(`Error getting page ${pageToken} for playlist ${playlistId}`);
             console.error(err);

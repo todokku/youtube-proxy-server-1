@@ -11,6 +11,7 @@ function msUntilMidnight() {
 }
 
 module.exports.setKeys = function(keys) {
+    keyQuotas = [];
     for (const key of keys) {
         keyQuotas.push({
             key: key,
@@ -25,8 +26,6 @@ module.exports.getTotalRemainingQuota = function() {
 }
 
 module.exports.getNextKey = function(cost) {
-    const startingIdx = 0;
-
     for(var i = 0; i < keyQuotas.length; i++) {
         if (keyQuotas[i].quota >= cost) {
             keyQuotas[i].quota -= cost;

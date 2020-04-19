@@ -44,8 +44,12 @@ module.exports.page = function(type, id, page, callback) {
     apiRequest('search', 'video', CONVERTERS.video, true, null, extras, callback);
 }
 
-module.exports.search = function(type, searchTerm, callback) {
-    apiRequest('search', type, CONVERTERS[type], false, searchTerm, '', callback);
+module.exports.search = function(type, searchTerm, page, callback) {
+    var extras = '';
+    if (page) {
+        extras += `&pageToken=${page}`;
+    }
+    apiRequest('search', type, CONVERTERS[type], true, searchTerm, extras, callback);
 } 
 
 function apiRequest(section, type, converter, paged, searchTerm, extraParams, callback) {
