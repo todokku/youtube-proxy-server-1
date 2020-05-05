@@ -6,14 +6,14 @@ const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3";
 const CONVERTERS = {
     'channel': ((item) => {
         return {
-            name: item.snippet.title,
+            title: item.snippet.title,
             id: item.snippet.channelId,
             thumbnail: (item.snippet.thumbnails.medium || item.snippet.thumbnails.default).url
         };
     }),
     'playlist': ((item) => {
         return {
-            name: item.snippet.title,
+            title: item.snippet.title,
             id: item.id.playlistId,
             thumbnail: (item.snippet.thumbnails.medium || item.snippet.thumbnails.default).url,
             channelId: item.snippet.channelId,
