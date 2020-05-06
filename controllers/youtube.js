@@ -52,6 +52,11 @@ module.exports.search = function(type, searchTerm, page, callback) {
     apiRequest('search', type, CONVERTERS[type], true, searchTerm, extras, callback);
 } 
 
+module.exports.singleVideo = function(id, callback) {
+    let extraParams = '&id=' + id;
+    apiRequest('videos', undefined, CONVERTERS.video, false, undefined, extraParams, callback);
+}
+
 function apiRequest(section, type, converter, paged, searchTerm, extraParams, callback) {
     performRequest(section, type, converter, paged, searchTerm, extraParams, [], callback);
 }
@@ -66,7 +71,10 @@ function performRequest(section, type, converter, paged, searchTerm, extraParams
         });
         return;
     }
-    var url = `${YOUTUBE_URL}/${section}?part=snippet&type=${type}&key=${key}&maxResults=50&safeSearch=none${extraParams}`;
+    var url = `${YOUTUBE_URL}/${section}?part=snippet&key=${key}&maxResults=50&safeSearch=none${extraParams}`;
+    if (type) {
+        url += `&type=${type}`;
+    }
     if (searchTerm) {
         url += `&q=${encodeURI(searchTerm)}`;
     }
