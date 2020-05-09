@@ -72,6 +72,19 @@ router.get("/channel/:id/videos", (req, res) => {
     });
 });
 
+router.get("/channel/:id", (req, res) => {
+    const channelId = req.params.id;
+    youtube.singleChannel(channelId, (err, data) => {
+        if (err) {
+            console.error(`Error getting channel ${channelId}`);
+            console.error(err);
+            res.sendStatus(500);
+        } else {
+            res.send(data);
+        }
+    });
+});
+
 router.get("/video/:id", (req, res) => {
     const videoId = req.params.id;
     youtube.singleVideo(videoId, (err, data) => {

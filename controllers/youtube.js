@@ -57,6 +57,11 @@ module.exports.singleVideo = function(id, callback) {
     apiRequest('videos', undefined, CONVERTERS.video, false, undefined, extraParams, callback);
 }
 
+module.exports.singleChannel = function(id, callback) {
+    let extraParams = '&id=' + id;
+    apiRequest('channels', undefined, CONVERTERS.channel, false, undefined, extraParams, callback);
+}
+
 function apiRequest(section, type, converter, paged, searchTerm, extraParams, callback) {
     performRequest(section, type, converter, paged, searchTerm, extraParams, [], callback);
 }
