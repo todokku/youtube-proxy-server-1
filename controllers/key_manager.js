@@ -2,13 +2,23 @@ var keyQuotas = [];
 
 function resetQuotas() {
     keyQuotas.forEach((keyQuota) => keyQuota.quota = 10000);
-    setTimeout(resetQuotas, msUntilMidnight());
+    setTimeout(resetQuotas, msUntilKeyRegen());
 }
 
-function msUntilMidnight() {
-    var now = new Date();
-    return now.getTime() - now.setHours(0,0,0,0);
+function msUntilKeyRegen() {
+    const RESET_HOUR = 8;
+    const now = new Date();
+
+    var resetTime = new Date();
+    resetTime.setHours(RESET_HOUR, 0, 0, 0);
+    if (now.getHours() >= RESET_HOUR) {
+        resetTime.setHours(resetTime.getHours() + 24);
+    }
+
+    return resetTime.getTime() - now.getTime();
 }
+
+module.exports.msUntilKeyRegen = msUntilKeyRegen;
 
 module.exports.setKeys = function(keys) {
     keyQuotas = [];
